@@ -1,0 +1,121 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    
+</head>
+<body>
+<div id="msg"></div>
+<div id="test"></div>
+    <h2>hello world</h2> 
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script>
+    var socket = io();  
+
+    socket.on('message',function(data){
+    document.getElementById('msg').innerHTML=data;
+    });
+    socket.on('testEvent',function(data){
+    document.getElementById('test').innerHTML=data;
+    });
+
+/* 
+    socket.on('message',function(data){
+        document.write(data);
+    }); */
+
+    </script>
+
+</body>
+</html> -->
+
+                <!-- ................BROADCASTING..................-->
+
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    
+</head>
+<body>
+<div id="msg"></div>
+<div id="test"></div>
+  
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script>
+    var socket = io();  
+    //socket.on('broadcast',function(data){
+        socket.on('newClientConnected',function(data){
+        document.getElementById('msg').innerHTML = data.message ;
+    })
+   
+    </script>
+
+</body>
+</html> -->
+
+
+
+               <!-- .................  CAHATTING APP .........................  -->
+
+               
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    
+</head>
+
+<body>
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script>
+    var socket = io();  
+   
+    function setUsername(){
+        socket.emit('setUsername',document.getElementById('name').value);
+    };
+    var user;
+    socket.on('userAlreadyExists',function(data){
+        document.getElementById('error-message').innerHTML = data;
+    });
+ socket.on('newUserSet',function(data){
+     user=data.username;
+     document.body.innerHTML='<input type="text" id="message" >\
+     <input type="button" onclick="sendMessage()" value="sendMessage"/>\
+     <div id="user-message"></div>';
+ });
+ function sendMessage(){
+  var msg=document.getElementById('message').value;
+  if(msg){
+      socket.emit('msg',{ message: msg, user: user});
+  }
+     }
+ 
+     socket.on('NewMessage',function(data){
+         if(user){
+             document.getElementById('user-message').innerHTML += '<div>\
+                <b> ' + data.user + '</b>: ' + data.message + '</div>';
+         }
+     });
+</script>
+
+ <div id="error-message"></div>
+ <input id="name" type="text" name="name" placeholder="Enter your name!"/>
+ <input type="button" value="Start chat" onclick="setUsername()"/>
+    
+    
+</body>
+</html>
